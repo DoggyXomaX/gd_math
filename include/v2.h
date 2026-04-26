@@ -2,7 +2,6 @@
 #define V2_HEADER
 
 #include "v2impl.h"
-#include <cmath>
 
 v2_header(v2, double);
 

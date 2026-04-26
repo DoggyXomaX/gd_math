@@ -2,8 +2,10 @@
 #define V4_HEADER
 
 #include "v4impl.h"
+#include "v3.h"
+#include "v2.h"
 
-v4_header(v4, double);
+v4_header(v4, v3, v2, double);
 
 #endif
 /* =============================== */
