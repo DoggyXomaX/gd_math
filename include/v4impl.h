@@ -68,13 +68,13 @@
     return (name){ 0, 0, 0, 0 };                                         \
   }                                                                      \
   name name##_zero() {                                                   \
-    return (name){ 0, 0, 0, 0 };                                         \
+    return name##_0();                                                   \
   }                                                                      \
   name name##_1() {                                                      \
     return (name){ 1, 1, 1, 1 };                                         \
   }                                                                      \
   name name##_one() {                                                    \
-    return (name){ 1, 1, 1, 1 };                                         \
+    return name##_1();                                                   \
   }                                                                      \
   name name##_neg(name a) {                                              \
     return (name){ -a.x, -a.y, -a.z, -a.w };                             \
