@@ -4,7 +4,9 @@
 #define m3_header(name, type, v2type, v3type)                                   \
   typedef union {                                                               \
     struct {                                                                    \
-      type a00, a10, a20, a01, a11, a21, a02, a12, a22;                         \
+      type a00, a10, a20;                                                       \
+      type a01, a11, a21;                                                       \
+      type a02, a12, a22;                                                       \
     };                                                                          \
     v3type column[3];                                                           \
     type index[3][3];                                                           \
@@ -163,6 +165,9 @@
     out->a02 = a->a02;                                                           \
     out->a12 = a->a12;                                                           \
     out->a22 = a->a22 * n;                                                       \
+  }                                                                              \
+  void name##_premul(name* out, name* a, name* b) {                              \
+    name##_mul(out, b, a);                                                       \
   }                                                                              \
   type name##_det(name* a) {                                                     \
     return (                                                                     \

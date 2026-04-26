@@ -4,7 +4,8 @@
 #define m2_header(name, type, v2type)                                 \
   typedef union {                                                     \
     struct {                                                          \
-      type a00, a10, a01, a11;                                        \
+      type a00, a10;                                                  \
+      type a01, a11;                                                  \
     };                                                                \
     v2type column[2];                                                 \
     type index[2][2];                                                 \
