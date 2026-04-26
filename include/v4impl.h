@@ -3,10 +3,12 @@
 
 #define v4_header(name, name3, name2, type)        \
   typedef union {                                  \
-    union {                                        \
-      name3 xyz;                                   \
-      struct {                                     \
-        type x, y, z;                              \
+    struct {                                       \
+      union {                                      \
+        name3 xyz;                                 \
+        struct {                                   \
+          type x, y, z;                            \
+        };                                         \
       };                                           \
       type w;                                      \
     };                                             \
@@ -29,10 +31,12 @@
       type _unused6;                               \
       name2 zw;                                    \
     };                                             \
-    union {                                        \
-      name3 rgb;                                   \
-      struct {                                     \
-        type r, g, b;                              \
+    struct {                                       \
+      union {                                      \
+        name3 rgb;                                 \
+        struct {                                   \
+          type r, g, b;                            \
+        };                                         \
       };                                           \
       type a;                                      \
     };                                             \
