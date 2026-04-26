@@ -1,4 +1,4 @@
-# GDMath
+# GameDev math
 
 ## Description
 Custom header-only GameDev math library for study purposes.
