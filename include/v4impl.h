@@ -60,57 +60,57 @@
   type name##_len(name a);                         \
   type name##_dot(name a, name b);
 
-#define v4_source(name, type, sqrt_provider)                             \
-  name name##_new(type x, type y, type z, type w) {                      \
-    return (name){ x, y, z, w };                                         \
-  }                                                                      \
-  name name##_0() {                                                      \
-    return (name){ 0, 0, 0, 0 };                                         \
-  }                                                                      \
-  name name##_zero() {                                                   \
-    return name##_0();                                                   \
-  }                                                                      \
-  name name##_1() {                                                      \
-    return (name){ 1, 1, 1, 1 };                                         \
-  }                                                                      \
-  name name##_one() {                                                    \
-    return name##_1();                                                   \
-  }                                                                      \
-  name name##_neg(name a) {                                              \
-    return (name){ -a.x, -a.y, -a.z, -a.w };                             \
-  }                                                                      \
-  name name##_add(name a, name b) {                                      \
-    return (name){ a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };         \
-  }                                                                      \
-  name name##_add1(name a, type n) {                                     \
-    return (name){ a.x + n, a.y + n, a.z + n, a.w + n };                 \
-  }                                                                      \
-  name name##_sub(name a, name b) {                                      \
-    return (name){ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };         \
-  }                                                                      \
-  name name##_sub1(name a, type n) {                                     \
-    return (name){ a.x - n, a.y - n, a.z - n, a.w - n };                 \
-  }                                                                      \
-  name name##_mul(name a, name b) {                                      \
-    return (name){ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };         \
-  }                                                                      \
-  name name##_mul1(name a, type n) {                                     \
-    return (name){ a.x * n, a.y * n, a.z * n, a.w * n };                 \
-  }                                                                      \
-  name name##_div(name a, name b) {                                      \
-    return (name){ a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w };         \
-  }                                                                      \
-  name name##_div1(name a, type n) {                                     \
-    return (name){ a.x / n, a.y / n, a.z / n, a.w / n };                 \
-  }                                                                      \
-  type name##_slen(name a) {                                             \
-    return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;                \
-  }                                                                      \
-  type name##_len(name a) {                                              \
-    return sqrt_provider(a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w); \
-  }                                                                      \
-  type name##_dot(name a, name b) {                                      \
-    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;                \
+#define v4_source(name, type, sqrtFunc)                             \
+  name name##_new(type x, type y, type z, type w) {                 \
+    return (name){ x, y, z, w };                                    \
+  }                                                                 \
+  name name##_0() {                                                 \
+    return (name){ 0, 0, 0, 0 };                                    \
+  }                                                                 \
+  name name##_zero() {                                              \
+    return name##_0();                                              \
+  }                                                                 \
+  name name##_1() {                                                 \
+    return (name){ 1, 1, 1, 1 };                                    \
+  }                                                                 \
+  name name##_one() {                                               \
+    return name##_1();                                              \
+  }                                                                 \
+  name name##_neg(name a) {                                         \
+    return (name){ -a.x, -a.y, -a.z, -a.w };                        \
+  }                                                                 \
+  name name##_add(name a, name b) {                                 \
+    return (name){ a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };    \
+  }                                                                 \
+  name name##_add1(name a, type n) {                                \
+    return (name){ a.x + n, a.y + n, a.z + n, a.w + n };            \
+  }                                                                 \
+  name name##_sub(name a, name b) {                                 \
+    return (name){ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };    \
+  }                                                                 \
+  name name##_sub1(name a, type n) {                                \
+    return (name){ a.x - n, a.y - n, a.z - n, a.w - n };            \
+  }                                                                 \
+  name name##_mul(name a, name b) {                                 \
+    return (name){ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };    \
+  }                                                                 \
+  name name##_mul1(name a, type n) {                                \
+    return (name){ a.x * n, a.y * n, a.z * n, a.w * n };            \
+  }                                                                 \
+  name name##_div(name a, name b) {                                 \
+    return (name){ a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w };    \
+  }                                                                 \
+  name name##_div1(name a, type n) {                                \
+    return (name){ a.x / n, a.y / n, a.z / n, a.w / n };            \
+  }                                                                 \
+  type name##_slen(name a) {                                        \
+    return a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;           \
+  }                                                                 \
+  type name##_len(name a) {                                         \
+    return sqrtFunc(a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w); \
+  }                                                                 \
+  type name##_dot(name a, name b) {                                 \
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;           \
   }
 
 #endif

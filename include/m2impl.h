@@ -55,19 +55,17 @@
       0, 1);                                                           \
   }                                                                    \
   void name##_0(name* out) {                                           \
-    name##_set(                                                        \
-      out,                                                             \
-      0, 0,                                                            \
-      0, 0);                                                           \
+    for (int i = 0; i < 4; i++) {                                      \
+      out->raw[i] = 0;                                                 \
+    }                                                                  \
   }                                                                    \
   void name##_zero(name* out) {                                        \
     name##_0(out);                                                     \
   }                                                                    \
   void name##_1(name* out) {                                           \
-    name##_set(                                                        \
-      out,                                                             \
-      1, 1,                                                            \
-      1, 1);                                                           \
+    for (int i = 0; i < 4; i++) {                                      \
+      out->raw[i] = 0;                                                 \
+    }                                                                  \
   }                                                                    \
   void name##_one(name* out) {                                         \
     name##_1(out);                                                     \

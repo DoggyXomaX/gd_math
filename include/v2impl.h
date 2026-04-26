@@ -33,7 +33,7 @@
   type name##_dot(name a, name b);            \
   type name##_cross(name a, name b);
 
-#define v2_source(name, type, sqrt_provider)           \
+#define v2_source(name, type, sqrtFunc)                \
   name name##_new(type x, type y) {                    \
     return (name){ x, y };                             \
   }                                                    \
@@ -87,7 +87,7 @@
     return a.x * a.x + a.y * a.y;                      \
   }                                                    \
   type name##_len(name a) {                            \
-    return sqrt_provider(a.x * a.x + a.y * a.y);       \
+    return sqrtFunc(a.x * a.x + a.y * a.y);            \
   }                                                    \
   type name##_dot(name a, name b) {                    \
     return a.x * b.x + a.y * b.y;                      \
