@@ -61,7 +61,8 @@ type3 rgb;
 type2 xy, yz, zw;
 ```
 
-## Vector2
+## Methods
+### v2
 ```c
 type new(number x, number y);
 type 0();
@@ -83,7 +84,7 @@ number dot(type a, type b);
 number cross(type a, type b);
 ```
 
-## Vector3
+### v3
 ```c
 type new(number x, number y, number z);
 type 0();
@@ -111,7 +112,7 @@ number dot(type a, type b);
 type cross(type a, type b);
 ```
 
-## Vector4
+### v4
 ```c
 type new(number x, number y, number z, number w);
 type 0();
