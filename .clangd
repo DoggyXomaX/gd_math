@@ -1,9 +1,2 @@
 Diagnostics:
   UnusedIncludes: Strict
-CompileFlags:
-  Add:
-    - -DMAINSCENE_SOURCE
-    - -DRENDERER_SOURCE
-    - -DSHADER_SOURCE
-    - -DGEOMETRY_SOURCE
-    - -DMATERIAL_SOURCE
