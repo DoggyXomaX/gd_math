@@ -60,6 +60,27 @@ type3 xyz, yzw;
 type3 rgb;
 type2 xy, yz, zw;
 ```
+### m2
+```c
+number a00, a10, a01, a11;
+type2 column[2];
+number index[2][2];
+number raw[4];
+```
+### m3
+```c
+number a00, a10, a20, a01, a11, a21, a02, a12, a22;
+type3 column[3];
+number index[3][3];
+number raw[9];
+```
+### m4
+```c
+number a00, a10, a20, a30, a01, a11, a21, a31, a02, a12, a22, a32, a03, a13, a23, a33;
+type4 column[4];
+number index[4][4];
+number raw[16];
+```
 
 ## Methods
 ### v2
@@ -83,7 +104,6 @@ number len(type a);
 number dot(type a, type b);
 number cross(type a, type b);
 ```
-
 ### v3
 ```c
 type new(number x, number y, number z);
@@ -111,7 +131,6 @@ number len(type a);
 number dot(type a, type b);
 type cross(type a, type b);
 ```
-
 ### v4
 ```c
 type new(number x, number y, number z, number w);
@@ -131,4 +150,100 @@ type div1(type a, number n);
 number slen(type a);
 number len(type a);
 number dot(type a, type b);
+```
+### m2
+```c
+type new(number a00, number a01, number a10, number a11);
+void set(type* out, number a00, number a01, number a10, number a11);
+void copy(type* out, type* a);
+void identity(type* out);
+void 0(type* out);
+void zero(type* out);
+void 1(type* out);
+void one(type* out);
+void add(type* out, type* a, type* b);
+void add1(type* out, type* a, number n);
+void sub(type* out, type* a, type* b);
+void sub1(type* out, type* a, number n);
+void div(type* out, type* a, type* b);
+void div1(type* out, type* a, number n);
+void mulc(type* out, type* a, type* b);
+void mulc1(type* out, type* a, number n);
+void mul(type* out, type* a, type* b);
+void mul1(type* out, type* a, number n);
+void premul(type* out, type* a, type* b);
+void trans(type* out, type* a);
+void inv(type* out, type* a);
+number det(type* a);
+```
+### m3
+```c
+type new(
+  number a00, number a01, number a02,
+  number a10, number a11, number a12,
+  number a20, number a21, number a22);
+void set(
+  type* out,
+  number a00, number a01, number a02,
+  number a10, number a11, number a12,
+  number a20, number a21, number a22);
+void copy(type* out, type* a);
+void identity(type* out);
+void 0(type* out);
+void zero(type* out);
+void 1(type* out);
+void one(type* out);
+void add(type* out, type* a, type* b);
+void add1(type* out, type* a, number n);
+void sub(type* out, type* a, type* b);
+void sub1(type* out, type* a, number n);
+void div(type* out, type* a, type* b);
+void div1(type* out, type* a, number n);
+void mulc(type* out, type* a, type* b);
+void mulc1(type* out, type* a, number n);
+void mul(type* out, type* a, type* b);
+void mul1(type* out, type* a, number n);
+void premul(type* out, type* a, type* b);
+number det(type* a);
+void trans(type* out, type* a);
+void inv(type* out, type* a);
+void compose(type* out, type2* position, number angle, type2* scale);
+void decompose(type* a, type2* position, number* angle, type2* scale);
+void apply(type* a, type2* out);
+```
+### m4
+```c
+type new(
+  number a00, number a01, number a02, number a03,
+  number a10, number a11, number a12, number a13,
+  number a20, number a21, number a22, number a23,
+  number a30, number a31, number a32, number a33);
+void set(
+  type* out,
+  number a00, number a01, number a02, number a03,
+  number a10, number a11, number a12, number a13,
+  number a20, number a21, number a22, number a23,
+  number a30, number a31, number a32, number a33);
+void copy(type* out, type* a);
+void identity(type* out);
+void 0(type* out);
+void zero(type* out);
+void 1(type* out);
+void one(type* out);
+void add(type* out, type* a, type* b);
+void add1(type* out, type* a, number n);
+void sub(type* out, type* a, type* b);
+void sub1(type* out, type* a, number n);
+void div(type* out, type* a, type* b);
+void div1(type* out, type* a, number n);
+void mulc(type* out, type* a, type* b);
+void mulc1(type* out, type* a, number n);
+void mul(type* out, type* a, type* b);
+void mul1(type* out, type* a, number n);
+void premul(type* out, type* a, type* b);
+number det(type* a);
+void inv(type* out, type* a);
+void compose(type* out, type3* position, type4* quaternion, type3* scale);
+void decompose(type* a, type3* position, type4* quaternion, type3* scale);
+void apply(type* a, type3* v);
 ```
