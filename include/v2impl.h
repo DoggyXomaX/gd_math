@@ -16,7 +16,9 @@
   } name;                                     \
   name name##_new(type x, type y);            \
   name name##_0();                            \
+  name name##_zero();                         \
   name name##_1();                            \
+  name name##_one();                          \
   name name##_neg(name a);                    \
   bool name##_equal(name a, name b);          \
   bool name##_equale(name a, name b, type e); \
@@ -38,7 +40,13 @@
   name name##_0() {                                    \
     return (name){ 0, 0 };                             \
   }                                                    \
+  name name##_zero() {                                 \
+    return (name){ 0, 0 };                             \
+  }                                                    \
   name name##_1() {                                    \
+    return (name){ 1, 1 };                             \
+  }                                                    \
+  name name##_one() {                                  \
     return (name){ 1, 1 };                             \
   }                                                    \
   name name##_neg(name a) {                            \
