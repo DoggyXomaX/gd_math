@@ -3,6 +3,7 @@ node_modules
 build
 dist
 public
+bin
 
 # IDE
 .zed
