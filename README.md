@@ -63,6 +63,7 @@ type2 xy, yz, zw;
 ### m2
 ```c
 number a00, a10, a01, a11;
+number m00, m01, m10, m11; // Sub matrices 1x1
 type2 column[2];
 number index[2][2];
 number raw[4];
@@ -70,6 +71,7 @@ number raw[4];
 ### m3
 ```c
 number a00, a10, a20, a01, a11, a21, a02, a12, a22;
+struct { type a00, a10, a01, a11 } m00, m01, m02, m10, m11, m12, m20, m21, m22; // Sub matrices 2x2
 type3 column[3];
 number index[3][3];
 number raw[9];
@@ -77,6 +79,7 @@ number raw[9];
 ### m4
 ```c
 number a00, a10, a20, a30, a01, a11, a21, a31, a02, a12, a22, a32, a03, a13, a23, a33;
+struct { type a00, a10, a20, a01, a11, a21, a02, a12, a22 } m00, m01, m02, m10, m11, m12, m20, m21, m22;
 type4 column[4];
 number index[4][4];
 number raw[16];
@@ -175,6 +178,9 @@ void premul(type* out, type* a, type* b);
 void trans(type* out, type* a);
 void inv(type* out, type* a);
 number det(type* a);
+int equal(type* a, type* b);
+int equalc(type* a, type a00, type a01, type a10, type a11);
+int equal1(type* a, number n);
 ```
 ### m3
 ```c
@@ -210,6 +216,12 @@ void inv(type* out, type* a);
 void compose(type* out, type2* position, number angle, type2* scale);
 void decompose(type* a, type2* position, number* angle, type2* scale);
 void apply(type* a, type2* out);
+int equal(name* a, name* b);
+int equalc(type* a,
+  number a00, number a01, number a02,
+  number a10, number a11, number a12,
+  number a20, number a21, number a22);
+int equal1(type* a, number n);
 ```
 ### m4
 ```c
@@ -245,5 +257,12 @@ number det(type* a);
 void inv(type* out, type* a);
 void compose(type* out, type3* position, type4* quaternion, type3* scale);
 void decompose(type* a, type3* position, type4* quaternion, type3* scale);
-void apply(type* a, type3* v);
+void apply(type* a, type3* v)
+int equal(type* a, type* b);
+int equalc(type* a,
+  number a00, number a01, number a02, number a03,
+  number a10, number a11, number a12, number a13,
+  number a20, number a21, number a22, number a23,
+  number a30, number a31, number a32, number a33);
+int equal1(type* a, number n);
 ```
