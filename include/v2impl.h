@@ -1,6 +1,8 @@
 #ifndef V2IMPL_HEADER
 #define V2IMPL_HEADER
 
+#include <stdbool.h>
+
 #define v2_header(name, type)                 \
   typedef union {                             \
     struct {                                  \
@@ -35,22 +37,22 @@
 
 #define v2_source(name, type, sqrtFunc)                \
   name name##_new(type x, type y) {                    \
-    return (name){ x, y };                             \
+    return (name){ { x, y } };                         \
   }                                                    \
   name name##_0() {                                    \
-    return (name){ 0, 0 };                             \
+    return name##_new(0, 0);                           \
   }                                                    \
   name name##_zero() {                                 \
     return name##_0();                                 \
   }                                                    \
   name name##_1() {                                    \
-    return (name){ 1, 1 };                             \
+    return name##_new(1, 1);                           \
   }                                                    \
   name name##_one() {                                  \
     return name##_1();                                 \
   }                                                    \
   name name##_neg(name a) {                            \
-    return (name){ -a.x, -a.y };                       \
+    return name##_new(-a.x, -a.y);                     \
   }                                                    \
   bool name##_equal(name a, name b) {                  \
     return a.x == b.x && a.y == b.y;                   \
@@ -60,28 +62,28 @@
            (a.y > b.y ? a.y - b.y : b.y - a.y) <= e;   \
   }                                                    \
   name name##_add(name a, name b) {                    \
-    return (name){ a.x + b.x, a.y + b.y };             \
+    return name##_new(a.x + b.x, a.y + b.y);           \
   }                                                    \
   name name##_add1(name a, type n) {                   \
-    return (name){ a.x + n, a.y + n };                 \
+    return name##_new(a.x + n, a.y + n);               \
   }                                                    \
   name name##_sub(name a, name b) {                    \
-    return (name){ a.x - b.x, a.y - b.y };             \
+    return name##_new(a.x - b.x, a.y - b.y);           \
   }                                                    \
   name name##_sub1(name a, type n) {                   \
-    return (name){ a.x - n, a.y - n };                 \
+    return name##_new(a.x - n, a.y - n);               \
   }                                                    \
   name name##_mul(name a, name b) {                    \
-    return (name){ a.x * b.x, a.y * b.y };             \
+    return name##_new(a.x * b.x, a.y * b.y);           \
   }                                                    \
   name name##_mul1(name a, type n) {                   \
-    return (name){ a.x * n, a.y * n };                 \
+    return name##_new(a.x * n, a.y * n);               \
   }                                                    \
   name name##_div(name a, name b) {                    \
-    return (name){ a.x / b.x, a.y / b.y };             \
+    return name##_new(a.x / b.x, a.y / b.y);           \
   }                                                    \
   name name##_div1(name a, type n) {                   \
-    return (name){ a.x / n, a.y / n };                 \
+    return name##_new(a.x / n, a.y / n);               \
   }                                                    \
   type name##_slen(name a) {                           \
     return a.x * a.x + a.y * a.y;                      \

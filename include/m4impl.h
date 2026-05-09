@@ -1,6 +1,8 @@
 #ifndef M4IMPL_HEADER
 #define M4IMPL_HEADER
 
+#include <stdbool.h>
+
 #define m4_header(name, type, v4type, v3type)                                          \
   typedef union {                                                                      \
     struct {                                                                           \
@@ -9,6 +11,102 @@
       type a02, a12, a22, a32;                                                         \
       type a03, a13, a23, a33;                                                         \
     };                                                                                 \
+    struct {                                                                           \
+      type __0, __1, __2, __3;                                                         \
+      type __4, a00, a10, a20;                                                         \
+      type __5, a01, a11, a21;                                                         \
+      type __6, a02, a12, a22;                                                         \
+    } m00;                                                                             \
+    struct {                                                                           \
+      type __0, a00, a10, a20;                                                         \
+      type __1, __2, __3, __4;                                                         \
+      type __5, a01, a11, a21;                                                         \
+      type __6, a02, a12, a22;                                                         \
+    } m01;                                                                             \
+    struct {                                                                           \
+      type __0, a00, a10, a20;                                                         \
+      type __1, a01, a11, a21;                                                         \
+      type __2, __3, __4, __5;                                                         \
+      type __6, a02, a12, a22;                                                         \
+    } m02;                                                                             \
+    struct {                                                                           \
+      type __0, a00, a10, a20;                                                         \
+      type __1, a01, a11, a21;                                                         \
+      type __2, a02, a12, a22;                                                         \
+      type __3, __4, __5, __6;                                                         \
+    } m03;                                                                             \
+    struct {                                                                           \
+      type __0, __1, __2, __3;                                                         \
+      type a00, __4, a10, a20;                                                         \
+      type a01, __5, a11, a21;                                                         \
+      type a02, __6, a12, a22;                                                         \
+    } m10;                                                                             \
+    struct {                                                                           \
+      type a00, __0, a10, a20;                                                         \
+      type __1, __2, __3, __4;                                                         \
+      type a01, __5, a11, a21;                                                         \
+      type a02, __6, a12, a22;                                                         \
+    } m11;                                                                             \
+    struct {                                                                           \
+      type a00, __0, a10, a20;                                                         \
+      type a01, __1, a11, a21;                                                         \
+      type __2, __3, __4, __5;                                                         \
+      type a02, __6, a12, a22;                                                         \
+    } m12;                                                                             \
+    struct {                                                                           \
+      type a00, __0, a10, a20;                                                         \
+      type a01, __1, a11, a21;                                                         \
+      type a02, __2, a12, a22;                                                         \
+      type __3, __4, __5, __6;                                                         \
+    } m13;                                                                             \
+    struct {                                                                           \
+      type __0, __1, __2, __3;                                                         \
+      type a00, a10, __4, a20;                                                         \
+      type a01, a11, __5, a21;                                                         \
+      type a02, a12, __6, a22;                                                         \
+    } m20;                                                                             \
+    struct {                                                                           \
+      type a00, a10, __0, a20;                                                         \
+      type __1, __2, __3, __4;                                                         \
+      type a01, a11, __5, a21;                                                         \
+      type a02, a12, __6, a22;                                                         \
+    } m21;                                                                             \
+    struct {                                                                           \
+      type a00, a10, __0, a20;                                                         \
+      type a01, a11, __1, a21;                                                         \
+      type __2, __3, __4, __5;                                                         \
+      type a02, a12, __6, a22;                                                         \
+    } m22;                                                                             \
+    struct {                                                                           \
+      type a00, a10, __0, a20;                                                         \
+      type a01, a11, __1, a21;                                                         \
+      type a02, a12, __2, a22;                                                         \
+      type __3, __4, __5, __6;                                                         \
+    } m23;                                                                             \
+    struct {                                                                           \
+      type __0, __1, __2, __3;                                                         \
+      type a00, a10, a20, __4;                                                         \
+      type a01, a11, a21, __5;                                                         \
+      type a02, a12, a22, __6;                                                         \
+    } m30;                                                                             \
+    struct {                                                                           \
+      type a00, a10, a20, __0;                                                         \
+      type __1, __2, __3, __4;                                                         \
+      type a01, a11, a21, __5;                                                         \
+      type a02, a12, a22, __6;                                                         \
+    } m31;                                                                             \
+    struct {                                                                           \
+      type a00, a10, a20, __0;                                                         \
+      type a01, a11, a21, __1;                                                         \
+      type __2, __3, __4, __5;                                                         \
+      type a02, a12, a22, __6;                                                         \
+    } m32;                                                                             \
+    struct {                                                                           \
+      type a00, a10, a20, __0;                                                         \
+      type a01, a11, a21, __1;                                                         \
+      type a02, a12, a22, __2;                                                         \
+      type __3, __4, __5, __6;                                                         \
+    } m33;                                                                             \
     v4type column[4];                                                                  \
     type index[4][4];                                                                  \
     type raw[16];                                                                      \
@@ -45,7 +143,15 @@
   void name##_inv(name* out, name* a);                                                 \
   void name##_compose(name* out, v3type* position, v4type* quaternion, v3type* scale); \
   void name##_decompose(name* a, v3type* position, v4type* quaternion, v3type* scale); \
-  void name##_apply(name* a, v3type* v);
+  void name##_apply(name* a, v3type* v);                                               \
+  int name##_equal(name* a, name* b);                                                  \
+  int name##_equalc(                                                                   \
+    name* a,                                                                           \
+    type a00, type a01, type a02, type a03,                                            \
+    type a10, type a11, type a12, type a13,                                            \
+    type a20, type a21, type a22, type a23,                                            \
+    type a30, type a31, type a32, type a33);                                           \
+  int name##_equal1(name* a, type n);
 
 #define m4_source(name, type, v4type, v3type, sqrtFunc)                                 \
   name name##_new(                                                                      \
@@ -54,22 +160,22 @@
     type a20, type a21, type a22, type a23,                                             \
     type a30, type a31, type a32, type a33) {                                           \
     return (name){                                                                      \
-      a00,                                                                              \
-      a10,                                                                              \
-      a20,                                                                              \
-      a30,                                                                              \
-      a01,                                                                              \
-      a11,                                                                              \
-      a21,                                                                              \
-      a31,                                                                              \
-      a02,                                                                              \
-      a12,                                                                              \
-      a22,                                                                              \
-      a32,                                                                              \
-      a03,                                                                              \
-      a13,                                                                              \
-      a23,                                                                              \
-      a33,                                                                              \
+      .a00 = a00,                                                                       \
+      .a10 = a10,                                                                       \
+      .a20 = a20,                                                                       \
+      .a30 = a30,                                                                       \
+      .a01 = a01,                                                                       \
+      .a11 = a11,                                                                       \
+      .a21 = a21,                                                                       \
+      .a31 = a31,                                                                       \
+      .a02 = a02,                                                                       \
+      .a12 = a12,                                                                       \
+      .a22 = a22,                                                                       \
+      .a32 = a32,                                                                       \
+      .a03 = a03,                                                                       \
+      .a13 = a13,                                                                       \
+      .a23 = a23,                                                                       \
+      .a33 = a33,                                                                       \
     };                                                                                  \
   }                                                                                     \
   void name##_set(                                                                      \
@@ -437,6 +543,34 @@
     v->x = (a->a00 * x + a->a01 * y + a->a02 * z + a->a03) * invW;                      \
     v->y = (a->a10 * x + a->a11 * y + a->a12 * z + a->a13) * invW;                      \
     v->z = (a->a20 * x + a->a21 * y + a->a22 * z + a->a23) * invW;                      \
+  }                                                                                     \
+  int name##_equal(name* a, name* b) {                                                  \
+    for (int i = 0; i < 16; i++) {                                                      \
+      if (a->raw[i] != b->raw[i]) {                                                     \
+        return false;                                                                   \
+      }                                                                                 \
+    }                                                                                   \
+    return true;                                                                        \
+  }                                                                                     \
+  int name##_equalc(                                                                    \
+    name* a,                                                                            \
+    type a00, type a01, type a02, type a03,                                             \
+    type a10, type a11, type a12, type a13,                                             \
+    type a20, type a21, type a22, type a23,                                             \
+    type a30, type a31, type a32, type a33) {                                           \
+    return (                                                                            \
+      a->a00 == a00 && a->a01 == a01 && a->a02 == a02 && a->a03 == a03 &&               \
+      a->a10 == a10 && a->a11 == a11 && a->a12 == a12 && a->a13 == a13 &&               \
+      a->a20 == a20 && a->a21 == a21 && a->a22 == a22 && a->a23 == a23 &&               \
+      a->a30 == a30 && a->a31 == a31 && a->a32 == a32 && a->a33 == a33);                \
+  }                                                                                     \
+  int name##_equal1(name* a, type n) {                                                  \
+    for (int i = 0; i < 16; i++) {                                                      \
+      if (a->raw[i] != n) {                                                             \
+        return false;                                                                   \
+      }                                                                                 \
+    }                                                                                   \
+    return true;                                                                        \
   }
 
 #endif

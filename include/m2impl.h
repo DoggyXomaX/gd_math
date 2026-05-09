@@ -1,11 +1,17 @@
 #ifndef M2IMPL_HEADER
 #define M2IMPL_HEADER
 
+#include <stdbool.h>
+
 #define m2_header(name, type, v2type)                                 \
   typedef union {                                                     \
     struct {                                                          \
       type a00, a10;                                                  \
       type a01, a11;                                                  \
+    };                                                                \
+    struct {                                                          \
+      type m11, m01;                                                  \
+      type m10, m00;                                                  \
     };                                                                \
     v2type column[2];                                                 \
     type index[2][2];                                                 \
@@ -32,11 +38,14 @@
   void name##_premul(name* out, name* a, name* b);                    \
   void name##_trans(name* out, name* a);                              \
   void name##_inv(name* out, name* a);                                \
-  type name##_det(name* a);
+  type name##_det(name* a);                                           \
+  int name##_equal(name* a, name* b);                                 \
+  int name##_equalc(name* a, type a00, type a01, type a10, type a11); \
+  int name##_equal1(name* a, type n);
 
 #define m2_source(name, type)                                          \
   name name##_new(type a00, type a01, type a10, type a11) {            \
-    return (name){ a00, a10, a01, a11 };                               \
+    return (name){ .a00 = a00, .a10 = a10, .a01 = a01, .a11 = a11 };   \
   }                                                                    \
   void name##_set(name* out, type a00, type a01, type a10, type a11) { \
     out->a00 = a00;                                                    \
@@ -65,7 +74,7 @@
   }                                                                    \
   void name##_1(name* out) {                                           \
     for (int i = 0; i < 4; i++) {                                      \
-      out->raw[i] = 0;                                                 \
+      out->raw[i] = 1;                                                 \
     }                                                                  \
   }                                                                    \
   void name##_one(name* out) {                                         \
@@ -157,6 +166,27 @@
   }                                                                    \
   type name##_det(name* a) {                                           \
     return a->a00 * a->a11 - a->a01 * a->a10;                          \
+  }                                                                    \
+  int name##_equal(name* a, name* b) {                                 \
+    for (int i = 0; i < 4; i++) {                                      \
+      if (a->raw[i] != b->raw[i]) {                                    \
+        return false;                                                  \
+      }                                                                \
+    }                                                                  \
+    return true;                                                       \
+  }                                                                    \
+  int name##_equalc(name* a, type a00, type a01, type a10, type a11) { \
+    return (                                                           \
+      a->a00 == a00 && a->a01 == a01 &&                                \
+      a->a10 == a10 && a->a11 == a11);                                 \
+  }                                                                    \
+  int name##_equal1(name* a, type n) {                                 \
+    for (int i = 0; i < 4; i++) {                                      \
+      if (a->raw[i] != n) {                                            \
+        return false;                                                  \
+      }                                                                \
+    }                                                                  \
+    return true;                                                       \
   }
 
 #endif

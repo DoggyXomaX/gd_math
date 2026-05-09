@@ -1,6 +1,8 @@
 #ifndef V3IMPL_HEADER
 #define V3IMPL_HEADER
 
+#include <stdbool.h>
+
 #define v3_header(name, name2, type)       \
   typedef union {                          \
     struct {                               \
@@ -54,64 +56,64 @@
 
 #define v3_source(name, type, sqrtFunc)                 \
   name name##_new(type x, type y, type z) {             \
-    return (name){ x, y, z };                           \
+    return (name){ .x = x, .y = y, .z = z };            \
   }                                                     \
   name name##_0() {                                     \
-    return (name){ 0, 0, 0 };                           \
+    return name##_new(0, 0, 0);                         \
   }                                                     \
   name name##_zero() {                                  \
     return name##_0();                                  \
   }                                                     \
   name name##_1() {                                     \
-    return (name){ 1, 1, 1 };                           \
+    return name##_new(1, 1, 1);                         \
   }                                                     \
   name name##_one() {                                   \
     return name##_1();                                  \
   }                                                     \
   name name##_right() {                                 \
-    return (name){ 1, 0, 0 };                           \
+    return name##_new(1, 0, 0);                         \
   }                                                     \
   name name##_left() {                                  \
-    return (name){ -1, 0, 0 };                          \
+    return name##_new(-1, 0, 0);                        \
   }                                                     \
   name name##_up() {                                    \
-    return (name){ 0, 1, 0 };                           \
+    return name##_new(0, 1, 0);                         \
   }                                                     \
   name name##_down() {                                  \
-    return (name){ 0, -1, 0 };                          \
+    return name##_new(0, -1, 0);                        \
   }                                                     \
   name name##_front() {                                 \
-    return (name){ 0, 0, 1 };                           \
+    return name##_new(0, 0, 1);                         \
   }                                                     \
   name name##_back() {                                  \
-    return (name){ 0, 0, -1 };                          \
+    return name##_new(0, 0, -1);                        \
   }                                                     \
   name name##_neg(name a) {                             \
-    return (name){ -a.x, -a.y, -a.z };                  \
+    return name##_new(-a.x, -a.y, -a.z);                \
   }                                                     \
   name name##_add(name a, name b) {                     \
-    return (name){ a.x + b.x, a.y + b.y, a.z + b.z };   \
+    return name##_new(a.x + b.x, a.y + b.y, a.z + b.z); \
   }                                                     \
   name name##_add1(name a, type n) {                    \
-    return (name){ a.x + n, a.y + n, a.z + n };         \
+    return name##_new(a.x + n, a.y + n, a.z + n);       \
   }                                                     \
   name name##_sub(name a, name b) {                     \
-    return (name){ a.x - b.x, a.y - b.y, a.z - b.z };   \
+    return name##_new(a.x - b.x, a.y - b.y, a.z - b.z); \
   }                                                     \
   name name##_sub1(name a, type n) {                    \
-    return (name){ a.x - n, a.y - n, a.z - n };         \
+    return name##_new(a.x - n, a.y - n, a.z - n);       \
   }                                                     \
   name name##_mul(name a, name b) {                     \
-    return (name){ a.x * b.x, a.y * b.y, a.z * b.z };   \
+    return name##_new(a.x * b.x, a.y * b.y, a.z * b.z); \
   }                                                     \
   name name##_mul1(name a, type n) {                    \
-    return (name){ a.x * n, a.y * n, a.z * n };         \
+    return name##_new(a.x * n, a.y * n, a.z * n);       \
   }                                                     \
   name name##_div(name a, name b) {                     \
-    return (name){ a.x / b.x, a.y / b.y, a.z / b.z };   \
+    return name##_new(a.x / b.x, a.y / b.y, a.z / b.z); \
   }                                                     \
   name name##_div1(name a, type n) {                    \
-    return (name){ a.x / n, a.y / n, a.z / n };         \
+    return name##_new(a.x / n, a.y / n, a.z / n);       \
   }                                                     \
   type name##_slen(name a) {                            \
     return a.x * a.x + a.y * a.y + a.z * a.z;           \
@@ -123,11 +125,10 @@
     return a.x * b.x + a.y * b.y + a.z * b.z;           \
   }                                                     \
   name name##_cross(name a, name b) {                   \
-    return (name){                                      \
+    return name##_new(                                  \
       a.y * b.z - a.z * b.y,                            \
       a.z * b.x - a.x * b.z,                            \
-      a.x * b.y - a.y * b.x                             \
-    };                                                  \
+      a.x * b.y - a.y * b.x);                           \
   }
 
 #endif
