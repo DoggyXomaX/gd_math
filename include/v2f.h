@@ -11,7 +11,7 @@ v2_header(v2f, float);
 
 #include <math.h>
 
-v2_source(v2f, float, sqrtf);
+v2_source(v2f, float, sqrtf, fabsf, cosf, sinf);
 
 #undef V2F_SOURCE
 #endif

@@ -13,7 +13,7 @@ v4_header(v4, v3, v2, double);
 
 #include "math.h"
 
-v4_source(v4, double, sqrt);
+v4_source(v4, v3, double, sqrt, fabs, cos, sin);
 
 #undef V4_SOURCE
 #endif

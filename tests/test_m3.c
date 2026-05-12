@@ -206,8 +206,8 @@ void test_m3() {
          0, 0, 1),
        "m3_compose");
 
-  position = v2_0();
-  scale = v2_0();
+  position = v2_new_0();
+  scale = v2_new_0();
   angle = 1;
 
   m3_decompose(&a, &position, &angle, &scale);

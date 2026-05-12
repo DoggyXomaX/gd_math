@@ -1,5 +1,5 @@
 #define V2_SOURCE
-#include "./test_v2.c"
+#include "test_v2.c"
 
 #define V3_SOURCE
 #include "test_v3.c"

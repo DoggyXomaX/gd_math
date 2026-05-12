@@ -312,9 +312,9 @@ void test_m4() {
          0, 0, 0, 1),
        "m4_compose");
 
-  position = v3_0();
+  position = v3_new_0();
   quaternion = v4_new(1, 1, 1, 1);
-  scale = v3_0();
+  scale = v3_new_0();
 
   m4_decompose(&a, &position, &quaternion, &scale);
   test(

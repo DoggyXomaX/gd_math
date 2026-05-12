@@ -1,75 +1,141 @@
-#include "../include/v4.h"
+#include "v4.h"
 #include "test.h"
 
 #include <math.h>
+#include <stdbool.h>
 
 void test_v4() {
   testName("v4");
 
-  v4 a, b, c;
+  v4 a, b, c, expected;
+  v3 euler;
 
   a = v4_new(2, 3, 4, 5);
-  test(a.x == 2 && a.y == 3 && a.z == 4 && a.w == 5, "v4_new");
+  expected = v4_new(2, 3, 4, 5);
+  test(v4_equal(&a, &expected), "v4_new");
 
-  a = v4_0();
-  test(a.x == 0 && a.y == 0 && a.z == 0 && a.w == 0, "v4_0");
+  v4_set(&a, 6, 7, 8, 9);
+  expected = v4_new(6, 7, 8, 9);
+  test(v4_equal(&a, &expected), "v4_set");
 
-  a = v4_zero();
-  test(a.x == 0 && a.y == 0 && a.z == 0 && a.w == 0, "v4_zero");
+  v4_copy(&c, &a);
+  expected = v4_new(6, 7, 8, 9);
+  test(v4_equal(&c, &expected), "v4_copy");
 
-  a = v4_1();
-  test(a.x == 1 && a.y == 1 && a.z == 1 && a.w == 1, "v4_1");
+  v4_0(&a);
+  expected = v4_new(0, 0, 0, 0);
+  test(v4_equal(&a, &expected), "v4_0");
 
-  a = v4_one();
-  test(a.x == 1 && a.y == 1 && a.z == 1 && a.w == 1, "v4_one");
+  a = v4_new_0();
+  expected = v4_new(0, 0, 0, 0);
+  test(v4_equal(&a, &expected), "v4_new_0");
+
+  v4_1(&a);
+  expected = v4_new(1, 1, 1, 1);
+  test(v4_equal(&a, &expected), "v4_1");
+
+  a = v4_new_1();
+  expected = v4_new(1, 1, 1, 1);
+  test(v4_equal(&a, &expected), "v4_new_1");
+
+  a = v4_new_identity();
+  expected = v4_new(0, 0, 0, 1);
+  test(v4_equal(&a, &expected), "v4_new_identity");
+
+  euler.x = 0;
+  euler.y = 0;
+  euler.z = 0;
+
+  v4_euler(&a, &euler);
+  expected = v4_new(0, 0, 0, 1);
+  test(v4_equal_e(&a, &expected, 0.000001), "v4_euler identity");
+
+  a = v4_new_euler(0, 0, 0);
+  expected = v4_new(0, 0, 0, 1);
+  test(v4_equal_e(&a, &expected, 0.000001), "v4_new_euler identity");
+
+  euler.x = acos(-1.0) * 0.5;
+  euler.y = 0;
+  euler.z = 0;
+
+  v4_euler(&a, &euler);
+  expected = v4_new(sqrt(0.5), 0, 0, sqrt(0.5));
+  test(v4_equal_e(&a, &expected, 0.000001), "v4_euler x");
+
+  a = v4_new_euler(acos(-1.0) * 0.5, 0, 0);
+  expected = v4_new(sqrt(0.5), 0, 0, sqrt(0.5));
+  test(v4_equal_e(&a, &expected, 0.000001), "v4_new_euler x");
 
   a = v4_new(2, 3, 4, 5);
-  c = v4_neg(a);
-  test(c.x == -2 && c.y == -3 && c.z == -4 && c.w == -5, "v4_neg");
+  v4_neg(&c, &a);
+  expected = v4_new(-2, -3, -4, -5);
+  test(v4_equal(&c, &expected), "v4_neg");
 
   a = v4_new(2, 3, 4, 5);
   b = v4_new(6, 7, 8, 9);
-  c = v4_add(a, b);
-  test(c.x == 8 && c.y == 10 && c.z == 12 && c.w == 14, "v4_add");
+  v4_add(&c, &a, &b);
+  expected = v4_new(8, 10, 12, 14);
+  test(v4_equal(&c, &expected), "v4_add");
 
   a = v4_new(2, 3, 4, 5);
-  c = v4_add1(a, 6);
-  test(c.x == 8 && c.y == 9 && c.z == 10 && c.w == 11, "v4_add1");
+  v4_add_n(&c, &a, 6);
+  expected = v4_new(8, 9, 10, 11);
+  test(v4_equal(&c, &expected), "v4_add_n");
 
   a = v4_new(6, 7, 8, 9);
   b = v4_new(2, 3, 4, 5);
-  c = v4_sub(a, b);
-  test(c.x == 4 && c.y == 4 && c.z == 4 && c.w == 4, "v4_sub");
+  v4_sub(&c, &a, &b);
+  expected = v4_new(4, 4, 4, 4);
+  test(v4_equal(&c, &expected), "v4_sub");
 
   a = v4_new(6, 7, 8, 9);
-  c = v4_sub1(a, 2);
-  test(c.x == 4 && c.y == 5 && c.z == 6 && c.w == 7, "v4_sub1");
+  v4_sub_n(&c, &a, 2);
+  expected = v4_new(4, 5, 6, 7);
+  test(v4_equal(&c, &expected), "v4_sub_n");
 
   a = v4_new(2, 3, 4, 5);
   b = v4_new(6, 7, 8, 9);
-  c = v4_mul(a, b);
-  test(c.x == 12 && c.y == 21 && c.z == 32 && c.w == 45, "v4_mul");
+  v4_mul(&c, &a, &b);
+  expected = v4_new(12, 21, 32, 45);
+  test(v4_equal(&c, &expected), "v4_mul");
 
   a = v4_new(2, 3, 4, 5);
-  c = v4_mul1(a, 6);
-  test(c.x == 12 && c.y == 18 && c.z == 24 && c.w == 30, "v4_mul1");
+  v4_mul_n(&c, &a, 6);
+  expected = v4_new(12, 18, 24, 30);
+  test(v4_equal(&c, &expected), "v4_mul_n");
 
   a = v4_new(12, 21, 32, 45);
   b = v4_new(6, 7, 8, 9);
-  c = v4_div(a, b);
-  test(c.x == 2 && c.y == 3 && c.z == 4 && c.w == 5, "v4_div");
+  v4_div(&c, &a, &b);
+  expected = v4_new(2, 3, 4, 5);
+  test(v4_equal(&c, &expected), "v4_div");
 
   a = v4_new(12, 18, 24, 30);
-  c = v4_div1(a, 6);
-  test(c.x == 2 && c.y == 3 && c.z == 4 && c.w == 5, "v4_div1");
+  v4_div_n(&c, &a, 6);
+  expected = v4_new(2, 3, 4, 5);
+  test(v4_equal(&c, &expected), "v4_div_n");
 
   a = v4_new(2, 3, 4, 5);
-  test(v4_slen(a) == 54, "v4_slen");
+  test(v4_slen(&a) == 54, "v4_slen");
 
   a = v4_new(2, 3, 4, 5);
-  test(fabs(v4_len(a) - sqrt(54)) < 0.000001, "v4_len");
+  test(fabs(v4_len(&a) - sqrt(54)) < 0.000001, "v4_len");
 
   a = v4_new(2, 3, 4, 5);
   b = v4_new(6, 7, 8, 9);
-  test(v4_dot(a, b) == 110, "v4_dot");
+  test(v4_dot(&a, &b) == 110, "v4_dot");
+
+  a = v4_new(2, 3, 4, 5);
+  b = v4_new(2, 3, 4, 5);
+  test(v4_equal(&a, &b), "v4_equal true");
+
+  b = v4_new(2, 3, 4, 6);
+  test(!v4_equal(&a, &b), "v4_equal false");
+
+  a = v4_new(2, 3, 4, 5);
+  b = v4_new(2.000001, 3.000001, 4.000001, 5.000001);
+  test(v4_equal_e(&a, &b, 0.00001), "v4_equal_e true");
+
+  b = v4_new(2.01, 3, 4, 5);
+  test(!v4_equal_e(&a, &b, 0.00001), "v4_equal_e false");
 }

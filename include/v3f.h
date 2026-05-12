@@ -10,9 +10,9 @@ v3_header(v3f, v2f, float);
 /* =============================== */
 #ifdef V3F_SOURCE
 
-#include "math.h"
+#include <math.h>
 
-v3_source(v3f, float, sqrtf);
+v3_source(v3f, float, sqrtf, fabsf, cosf, sinf);
 
 #undef V3F_SOURCE
 #endif

@@ -9,3 +9,12 @@ CompileFlags:
     - -Wall
     - -Wextra
     - -lm
+---
+If:
+  PathMatch: (^|.*/)(tests|include)/.*\.(c|h)$
+CompileFlags:
+  Add:
+    - -I../include
+    - -I../deps/gl3w/include
+    - -I../deps/SDL/include
+    - -I../deps/gd_math/include

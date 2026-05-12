@@ -11,7 +11,7 @@ v4_header(v4f, v3f, v2f, float);
 /* =============================== */
 #ifdef V4F_SOURCE
 
-v4_source(v4f, float, sqrtf);
+v4_source(v4f, v3f, float, sqrtf, fabsf, cosf, sinf);
 
 #undef V4F_SOURCE
 #endif

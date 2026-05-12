@@ -11,7 +11,7 @@ v2_header(v2, double);
 
 #include <math.h>
 
-v2_source(v2, double, sqrt);
+v2_source(v2, double, sqrt, fabs, cos, sin);
 
 #undef V2_SOURCE
 #endif
