@@ -1,4 +1,4 @@
-#include "../include/m4.h"
+#include "m4.h"
 #include "test.h"
 
 void test_m4() {
@@ -7,6 +7,8 @@ void test_m4() {
   m4 a, b, c;
   v3 position, scale, point;
   v4 quaternion;
+  double pi = 3.14159265358979323846;
+  double e = 0.000000001;
 
   a = m4_new(
     1, 2, 3, 4,
@@ -95,7 +97,6 @@ void test_m4() {
       a.m33.a00 == 1 && a.m33.a01 == 2 && a.m33.a02 == 3 &&
       a.m33.a10 == 5 && a.m33.a11 == 6 && a.m33.a12 == 7 &&
       a.m33.a20 == 9 && a.m33.a21 == 10 && a.m33.a22 == 11,
-
     "m4.m*");
 
   test(a.column[0].raw[0] == 1 && a.column[0].raw[1] == 5 && a.column[0].raw[2] == 9 && a.column[0].raw[3] == 13 &&
@@ -110,7 +111,7 @@ void test_m4() {
     12, 11, 10, 9,
     8, 7, 6, 5,
     4, 3, 2, 1);
-  test(m4_equalc(
+  test(m4_equal_s(
          &a,
          16, 15, 14, 13,
          12, 11, 10, 9,
@@ -119,7 +120,7 @@ void test_m4() {
        "m4_set");
 
   m4_copy(&b, &a);
-  test(m4_equalc(
+  test(m4_equal_s(
          &b,
          16, 15, 14, 13,
          12, 11, 10, 9,
@@ -128,21 +129,150 @@ void test_m4() {
        "m4_copy");
 
   m4_0(&a);
-  m4_zero(&b);
-  test(m4_equal1(&a, 0) && m4_equal1(&b, 0), "m4_0/m4_zero");
+  test(m4_equal_n(&a, 0), "m4_0");
 
   m4_1(&a);
-  m4_one(&b);
-  test(m4_equal1(&a, 1) && m4_equal1(&b, 1), "m4_1/m4_one");
+  test(m4_equal_n(&a, 1), "m4_1");
 
   m4_identity(&a);
-  test(m4_equalc(
+  test(m4_equal_s(
          &a,
          1, 0, 0, 0,
          0, 1, 0, 0,
          0, 0, 1, 0,
          0, 0, 0, 1),
        "m4_identity");
+
+  m4_move(&a, 10, 20, 30);
+  test(m4_equal_s(
+         &a,
+         1, 0, 0, 10,
+         0, 1, 0, 20,
+         0, 0, 1, 30,
+         0, 0, 0, 1),
+       "m4_move");
+
+  m4_rotx(&a, pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         1, 0, 0, 0,
+         0, 0, 1, 0,
+         0, -1, 0, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_rotx");
+
+  m4_roty(&a, pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         0, 0, -1, 0,
+         0, 1, 0, 0,
+         1, 0, 0, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_roty");
+
+  m4_rotz(&a, pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         0, -1, 0, 0,
+         1, 0, 0, 0,
+         0, 0, 1, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_rotz");
+
+  m4_scale(&a, 2, 3, 4);
+  test(m4_equal_s(
+         &a,
+         2, 0, 0, 0,
+         0, 3, 0, 0,
+         0, 0, 4, 0,
+         0, 0, 0, 1),
+       "m4_scale");
+
+  m4_project(&a, 90, 2, 1, 101);
+  test(m4_equal_se(
+         &a,
+         0.5, 0, 0, 0,
+         0, 1, 0, 0,
+         0, 0, -1.02, -2.02,
+         0, 0, -1, 1,
+         e),
+       "m4_project");
+
+  a = m4_new_0();
+  test(m4_equal_n(&a, 0), "m4_new_0");
+
+  a = m4_new_1();
+  test(m4_equal_n(&a, 1), "m4_new_1");
+
+  a = m4_new_identity();
+  test(m4_equal_s(
+         &a,
+         1, 0, 0, 0,
+         0, 1, 0, 0,
+         0, 0, 1, 0,
+         0, 0, 0, 1),
+       "m4_new_identity");
+
+  a = m4_new_move(10, 20, 30);
+  test(m4_equal_s(
+         &a,
+         1, 0, 0, 10,
+         0, 1, 0, 20,
+         0, 0, 1, 30,
+         0, 0, 0, 1),
+       "m4_new_move");
+
+  a = m4_new_rotx(pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         1, 0, 0, 0,
+         0, 0, 1, 0,
+         0, -1, 0, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_new_rotx");
+
+  a = m4_new_roty(pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         0, 0, -1, 0,
+         0, 1, 0, 0,
+         1, 0, 0, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_new_roty");
+
+  a = m4_new_rotz(pi * 0.5);
+  test(m4_equal_se(
+         &a,
+         0, -1, 0, 0,
+         1, 0, 0, 0,
+         0, 0, 1, 0,
+         0, 0, 0, 1,
+         e),
+       "m4_new_rotz");
+
+  a = m4_new_scale(2, 3, 4);
+  test(m4_equal_s(
+         &a,
+         2, 0, 0, 0,
+         0, 3, 0, 0,
+         0, 0, 4, 0,
+         0, 0, 0, 1),
+       "m4_new_scale");
+
+  a = m4_new_project(90, 2, 1, 101);
+  test(m4_equal_se(
+         &a,
+         0.5, 0, 0, 0,
+         0, 1, 0, 0,
+         0, 0, -1.02, -2.02,
+         0, 0, -1, 1,
+         e),
+       "m4_new_project");
 
   m4_set(
     &a,
@@ -157,7 +287,7 @@ void test_m4() {
     10, 11, 12, 13,
     14, 15, 16, 17);
   m4_add(&c, &a, &b);
-  test(m4_equalc(
+  test(m4_equal_s(
          &c,
          3, 5, 7, 9,
          11, 13, 15, 17,
@@ -165,14 +295,14 @@ void test_m4() {
          27, 29, 31, 33),
        "m4_add");
 
-  m4_add1(&c, &c, 4);
-  test(m4_equalc(
+  m4_add_n(&c, &c, 4);
+  test(m4_equal_s(
          &c,
          7, 9, 11, 13,
          15, 17, 19, 21,
          23, 25, 27, 29,
          31, 33, 35, 37),
-       "m4_add1");
+       "m4_add_n");
 
   m4_set(
     &a,
@@ -188,10 +318,10 @@ void test_m4() {
     14, 15, 16, 17);
 
   m4_sub(&c, &b, &a);
-  test(m4_equal1(&c, 1), "m4_sub");
+  test(m4_equal_n(&c, 1), "m4_sub");
 
-  m4_sub1(&c, &c, 1);
-  test(m4_equal1(&c, 0), "m4_sub1");
+  m4_sub_n(&c, &c, 1);
+  test(m4_equal_n(&c, 0), "m4_sub_n");
 
   m4_set(
     &a,
@@ -207,7 +337,7 @@ void test_m4() {
     14, 15, 16, 17);
 
   m4_div(&c, &a, &b);
-  test(m4_equalc(
+  test(m4_equal_s(
          &c,
          4, 6, 8, 10,
          12, 14, 16, 18,
@@ -215,14 +345,14 @@ void test_m4() {
          28, 30, 32, 34),
        "m4_div");
 
-  m4_div1(&c, &c, 2);
-  test(m4_equalc(
+  m4_div_n(&c, &c, 2);
+  test(m4_equal_s(
          &c,
          2, 3, 4, 5,
          6, 7, 8, 9,
          10, 11, 12, 13,
          14, 15, 16, 17),
-       "m4_div1");
+       "m4_div_n");
 
   m4_set(
     &a,
@@ -237,26 +367,8 @@ void test_m4() {
     10, 11, 12, 13,
     14, 15, 16, 17);
 
-  m4_mulc(&c, &a, &b);
-  test(m4_equalc(
-         &c,
-         2, 6, 12, 20,
-         30, 42, 56, 72,
-         90, 110, 132, 156,
-         182, 210, 240, 272),
-       "m4_mulc");
-
-  m4_mulc1(&c, &a, 2);
-  test(m4_equalc(
-         &c,
-         2, 4, 6, 8,
-         10, 12, 14, 16,
-         18, 20, 22, 24,
-         26, 28, 30, 32),
-       "m4_mulc1");
-
   m4_mul(&c, &a, &b);
-  test(m4_equalc(
+  test(m4_equal_s(
          &c,
          100, 110, 120, 130,
          228, 254, 280, 306,
@@ -264,17 +376,17 @@ void test_m4() {
          484, 542, 600, 658),
        "m4_mul");
 
-  m4_mul1(&c, &a, 2);
-  test(m4_equalc(
+  m4_mul_n(&c, &a, 2);
+  test(m4_equal_s(
          &c,
-         2, 2, 3, 4,
-         5, 12, 7, 8,
-         9, 10, 22, 12,
-         13, 14, 15, 32),
-       "m4_mul1");
+         2, 4, 6, 8,
+         10, 12, 14, 16,
+         18, 20, 22, 24,
+         26, 28, 30, 32),
+       "m4_mul_n");
 
   m4_premul(&c, &a, &b);
-  test(m4_equalc(
+  test(m4_equal_s(
          &c,
          118, 132, 146, 160,
          230, 260, 290, 320,
@@ -291,7 +403,7 @@ void test_m4() {
   test(m4_det(&a) == 1, "m4_det");
 
   m4_inv(&c, &a);
-  test(m4_equalc(
+  test(m4_equal_s(
          &c,
          1, -2, 7, -41,
          0, 1, -5, 29,
@@ -304,7 +416,7 @@ void test_m4() {
   scale = v3_new(2, 3, 4);
 
   m4_compose(&a, &position, &quaternion, &scale);
-  test(m4_equalc(
+  test(m4_equal_s(
          &a,
          2, 0, 0, 10,
          0, 3, 0, 20,
@@ -327,4 +439,51 @@ void test_m4() {
 
   m4_apply(&a, &point);
   test(point.x == 18 && point.y == 35 && point.z == 54, "m4_apply");
+
+  m4_set(
+    &a,
+    1, 2, 3, 4,
+    5, 6, 7, 8,
+    9, 10, 11, 12,
+    13, 14, 15, 16);
+  b = m4_new(
+    1, 2, 3, 4,
+    5, 6, 7, 8,
+    9, 10, 11, 12,
+    13, 14, 15, 16);
+  test(m4_equal(&a, &b), "m4_equal");
+
+  b = m4_new(
+    1.001, 2.001, 3.001, 4.001,
+    5.001, 6.001, 7.001, 8.001,
+    9.001, 10.001, 11.001, 12.001,
+    13.001, 14.001, 15.001, 16.001);
+  test(m4_equal_e(&a, &b, 0.01), "m4_equal_e");
+
+  test(m4_equal_s(
+         &a,
+         1, 2, 3, 4,
+         5, 6, 7, 8,
+         9, 10, 11, 12,
+         13, 14, 15, 16),
+       "m4_equal_s");
+
+  test(m4_equal_se(
+         &a,
+         1.001, 2.001, 3.001, 4.001,
+         5.001, 6.001, 7.001, 8.001,
+         9.001, 10.001, 11.001, 12.001,
+         13.001, 14.001, 15.001, 16.001,
+         0.01),
+       "m4_equal_se");
+
+  m4_1(&a);
+  test(m4_equal_n(&a, 1), "m4_equal_n");
+
+  a = m4_new(
+    1.001, 1.001, 1.001, 1.001,
+    1.001, 1.001, 1.001, 1.001,
+    1.001, 1.001, 1.001, 1.001,
+    1.001, 1.001, 1.001, 1.001);
+  test(m4_equal_ne(&a, 1, 0.01), "m4_equal_ne");
 }

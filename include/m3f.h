@@ -5,7 +5,7 @@
 #include "v2f.h"
 #include "v3f.h"
 
-m3_header(m3f, float, v2f, v3f);
+m3_header(m3f, v3f, v2f, float);
 
 #endif
 /* =============================== */
@@ -13,7 +13,7 @@ m3_header(m3f, float, v2f, v3f);
 
 #include <math.h>
 
-m3_source(m3f, float, v2f, cosf, sinf, sqrtf, atan2f);
+m3_source(m3f, v2f, float, fabsf, cosf, sinf, sqrtf, atan2f);
 
 #undef M3F_SOURCE
 #endif

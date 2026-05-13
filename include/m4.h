@@ -5,7 +5,7 @@
 #include "v4.h"
 #include "v3.h"
 
-m4_header(m4, double, v4, v3);
+m4_header(m4, v4, v3, double);
 
 #endif
 /* =============================== */
@@ -13,7 +13,7 @@ m4_header(m4, double, v4, v3);
 
 #include <math.h>
 
-m4_source(m4, double, v4, v3, sqrt);
+m4_source(m4, v4, v3, double, fabs, cos, sin, tan, sqrt);
 
 #undef M4_SOURCE
 #endif

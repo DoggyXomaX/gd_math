@@ -1,4 +1,4 @@
-#include "../include/m3.h"
+#include "m3.h"
 #include "test.h"
 
 void test_m3() {
@@ -45,7 +45,6 @@ void test_m3() {
       a.m21.a10 == 4 && a.m21.a11 == 6 &&
       a.m22.a00 == 1 && a.m22.a01 == 2 &&
       a.m22.a10 == 4 && a.m22.a11 == 5,
-
     "m3.m*");
 
   test(a.column[0].raw[0] == 1 && a.column[0].raw[1] == 4 && a.column[0].raw[2] == 7 &&
@@ -58,43 +57,103 @@ void test_m3() {
     9, 8, 7,
     6, 5, 4,
     3, 2, 1);
-  test(m3_equalc(&a, 9, 8, 7, 6, 5, 4, 3, 2, 1), "m3_set");
+  test(m3_equal_s(&a, 9, 8, 7, 6, 5, 4, 3, 2, 1), "m3_set");
 
   m3_copy(&b, &a);
-  test(m3_equalc(&b, 9, 8, 7, 6, 5, 4, 3, 2, 1), "m3_copy");
+  test(m3_equal_s(&b, 9, 8, 7, 6, 5, 4, 3, 2, 1), "m3_copy");
 
   m3_0(&a);
-  m3_zero(&b);
-  test(m3_equal1(&a, 0) && m3_equal1(&b, 0), "m3_0/m3_zero");
+  test(m3_equal_n(&a, 0), "m3_0");
 
   m3_1(&a);
-  m3_one(&b);
-  test(m3_equal1(&a, 1) && m3_equal1(&b, 1), "m3_1/m3_one");
+  test(m3_equal_n(&a, 1), "m3_1");
 
   m3_identity(&a);
-  test(m3_equalc(
+  test(m3_equal_s(
          &a,
          1, 0, 0,
          0, 1, 0,
          0, 0, 1),
        "m3_identity");
 
+  a = m3_new_0();
+  test(m3_equal_n(&a, 0), "m3_new_0");
+
+  a = m3_new_1();
+  test(m3_equal_n(&a, 1), "m3_new_1");
+
+  a = m3_new_identity();
+  test(m3_equal_s(
+         &a,
+         1, 0, 0,
+         0, 1, 0,
+         0, 0, 1),
+       "m3_new_identity");
+
+  a = m3_new_move(10, 20);
+  test(m3_equal_s(
+         &a,
+         1, 0, 10,
+         0, 1, 20,
+         0, 0, 1),
+       "m3_new_move");
+
+  a = m3_new_rotate(0);
+  test(m3_equal_s(
+         &a,
+         1, 0, 0,
+         0, 1, 0,
+         0, 0, 1),
+       "m3_new_rotate");
+
+  a = m3_new_scale(2, 3);
+  test(m3_equal_s(
+         &a,
+         2, 0, 0,
+         0, 3, 0,
+         0, 0, 1),
+       "m3_new_scale");
+
+  m3_move(&a, 10, 20);
+  test(m3_equal_s(
+         &a,
+         1, 0, 10,
+         0, 1, 20,
+         0, 0, 1),
+       "m3_move");
+
+  m3_rotate(&a, 0);
+  test(m3_equal_s(
+         &a,
+         1, 0, 0,
+         0, 1, 0,
+         0, 0, 1),
+       "m3_rotate");
+
+  m3_scale(&a, 2, 3);
+  test(m3_equal_s(
+         &a,
+         2, 0, 0,
+         0, 3, 0,
+         0, 0, 1),
+       "m3_scale");
+
   m3_set(&a, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   m3_set(&b, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   m3_add(&c, &a, &b);
-  test(m3_equalc(&c, 3, 5, 7, 9, 11, 13, 15, 17, 19), "m3_add");
+  test(m3_equal_s(&c, 3, 5, 7, 9, 11, 13, 15, 17, 19), "m3_add");
 
-  m3_add1(&c, &c, 4);
-  test(m3_equalc(&c, 7, 9, 11, 13, 15, 17, 19, 21, 23), "m3_add1");
+  m3_add_n(&c, &c, 4);
+  test(m3_equal_s(&c, 7, 9, 11, 13, 15, 17, 19, 21, 23), "m3_add_n");
 
   m3_set(&a, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   m3_set(&b, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
   m3_sub(&c, &b, &a);
-  test(m3_equal1(&c, 1), "m3_sub");
+  test(m3_equal_n(&c, 1), "m3_sub");
 
-  m3_sub1(&c, &c, 1);
-  test(m3_equal1(&c, 0), "m3_sub1");
+  m3_sub_n(&c, &c, 1);
+  test(m3_equal_n(&c, 0), "m3_sub_n");
 
   m3_set(
     &a,
@@ -108,58 +167,42 @@ void test_m3() {
     8, 9, 10);
 
   m3_div(&c, &a, &b);
-  test(m3_equalc(
+  test(m3_equal_s(
          &c,
          4, 6, 8,
          10, 12, 14,
          16, 18, 20),
        "m3_div");
 
-  m3_div1(&c, &c, 2);
-  test(m3_equalc(
+  m3_div_n(&c, &c, 2);
+  test(m3_equal_s(
          &c,
          2, 3, 4,
          5, 6, 7,
          8, 9, 10),
-       "m3_div1");
+       "m3_div_n");
 
   m3_set(&a, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   m3_set(&b, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
-  m3_mulc(&c, &a, &b);
-  test(m3_equalc(
-         &c,
-         2, 6, 12,
-         20, 30, 42,
-         56, 72, 90),
-       "m3_mulc");
-
-  m3_mulc1(&c, &a, 2);
-  test(m3_equalc(
-         &c,
-         2, 4, 6,
-         8, 10, 12,
-         14, 16, 18),
-       "m3_mulc1");
-
   m3_mul(&c, &a, &b);
-  test(m3_equalc(
+  test(m3_equal_s(
          &c,
          36, 42, 48,
          81, 96, 111,
          126, 150, 174),
        "m3_mul");
 
-  m3_mul1(&c, &a, 2);
-  test(m3_equalc(
+  m3_mul_n(&c, &a, 2);
+  test(m3_equal_s(
          &c,
-         2, 2, 3,
-         4, 10, 6,
-         7, 8, 18),
-       "m3_mul1");
+         2, 4, 6,
+         8, 10, 12,
+         14, 16, 18),
+       "m3_mul_n");
 
   m3_premul(&c, &a, &b);
-  test(m3_equalc(
+  test(m3_equal_s(
          &c,
          42, 51, 60,
          78, 96, 114,
@@ -175,7 +218,7 @@ void test_m3() {
 
   m3_set(&a, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   m3_trans(&c, &a);
-  test(m3_equalc(
+  test(m3_equal_s(
          &c,
          1, 4, 7,
          2, 5, 8,
@@ -188,7 +231,7 @@ void test_m3() {
     0, 1, 4,
     5, 6, 0);
   m3_inv(&c, &a);
-  test(m3_equalc(
+  test(m3_equal_s(
          &c,
          -24, 18, 5,
          20, -15, -4,
@@ -199,7 +242,7 @@ void test_m3() {
   scale = v2_new(2, 3);
 
   m3_compose(&a, &position, 0, &scale);
-  test(m3_equalc(
+  test(m3_equal_s(
          &a,
          2, 0, 10,
          0, 3, 20,
@@ -217,9 +260,42 @@ void test_m3() {
       scale.x == 2 && scale.y == 3,
     "m3_decompose");
 
-  point.x = 4;
-  point.y = 5;
+  point = v2_new(4, 5);
 
   m3_apply(&a, &point);
   test(point.x == 18 && point.y == 35, "m3_apply");
+
+  m3_set(&a, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  b = m3_new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+  test(m3_equal(&a, &b), "m3_equal");
+
+  b = m3_new(
+    1.001, 2.001, 3.001,
+    4.001, 5.001, 6.001,
+    7.001, 8.001, 9.001);
+  test(m3_equal_e(&a, &b, 0.01), "m3_equal_e");
+
+  test(m3_equal_s(
+         &a,
+         1, 2, 3,
+         4, 5, 6,
+         7, 8, 9),
+       "m3_equal_s");
+
+  test(m3_equal_se(
+         &a,
+         1.001, 2.001, 3.001,
+         4.001, 5.001, 6.001,
+         7.001, 8.001, 9.001,
+         0.01),
+       "m3_equal_se");
+
+  m3_1(&a);
+  test(m3_equal_n(&a, 1), "m3_equal_n");
+
+  a = m3_new(
+    1.001, 1.001, 1.001,
+    1.001, 1.001, 1.001,
+    1.001, 1.001, 1.001);
+  test(m3_equal_ne(&a, 1, 0.01), "m3_equal_ne");
 }

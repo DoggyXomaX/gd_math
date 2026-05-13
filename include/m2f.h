@@ -4,13 +4,13 @@
 #include "m2impl.h"
 #include "v2f.h"
 
-m2_header(m2f, float, v2f);
+m2_header(m2f, v2f, float);
 
 #endif
 /* =============================== */
 #ifdef M2F_SOURCE
 
-m2_source(m2f, float);
+m2_source(m2f, float, fabsf);
 
 #undef M2F_SOURCE
 #endif
